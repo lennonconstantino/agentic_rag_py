@@ -1,5 +1,6 @@
 from agenticRagSystem import AgenticRAGSystem
 from rag.load import load_vectordb
+import asyncio
 
 def main():
     # Initialize the Agentic RAG system
@@ -14,11 +15,11 @@ def main():
     
     # Process some queries
     queries = [
-        "What do you know about Apple?",
-        "What are the latest trends in AI?",
-        "How many employees does our company have?",
-        "What is the mission of Apple?",
-        "What is the value proposition of Apple?",
+        # "What do you know about Apple?",
+        # "What are the latest trends in AI?",
+        # "How many employees does our company have?",
+        # "What is the mission of Apple?",
+        # "What is the value proposition of Apple?",
         "What is the products of Apple?",
     ]
     
@@ -29,5 +30,6 @@ def main():
         print(f"Memory stats: {rag_system.get_memory_stats()}") 
 
 if __name__ == "__main__":
+    #asyncio.run(main())
     main()
     #load_vectordb()

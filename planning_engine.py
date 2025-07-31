@@ -37,9 +37,9 @@ class PlanningEngine:
             "Fetch information from sources",
             "Synthesize and rank results"
         ]
-        
+
         return Plan(steps=steps, data_sources=data_sources, reasoning_trace=reasoning_trace)
-    
+
     def _cot_planning(self, query: str, memory_context: Dict[str, Any]) -> Plan:
         """Chain of Thought planning approach"""
         reasoning_trace = [

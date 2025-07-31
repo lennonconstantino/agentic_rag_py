@@ -11,7 +11,7 @@ class AggregatorAgent:
         self.memory = Memory(short_term={}, long_term={})
         self.planning_engine = PlanningEngine()
         self.data_sources = {
-            "local": LocalDataSource({"example": "This is local data"}),
+            "local": LocalDataSource({"ai": "starting"}),
             "search_engine": SearchEngineSource(),
             "cloud_engine": CloudEngineSource()
         }

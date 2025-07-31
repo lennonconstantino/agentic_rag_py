@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
+import asyncio
 from typing import Dict, Any
+
+from mcp_base.client.mcp_client import McpClient
 
 class DataSource(ABC):
     """Abstract base class for data sources"""
@@ -15,12 +18,44 @@ class LocalDataSource(DataSource):
         self.data = data
     
     def fetch(self, query: str) -> Dict[str, Any]:
+        return asyncio.run(self._fetch(query))
+    
+    async def _fetch(self, query: str) -> Dict[str, Any]:
         # Simple keyword matching - replace with vector search in practice
         results = {}
         for key, value in self.data.items():
             if any(word.lower() in str(value).lower() for word in query.split()):
                 results[key] = value
-        return {"source": "local", "results": results}
+
+        print("...")
+        print(results)
+
+        client = McpClient()
+
+        try:
+            await client.initialize_with_stdio("mcp", ["run", "mcp_base/server/server_support_apple.py"])
+
+            tools = await client.get_tools()  # await aqui
+            for tool in tools:
+                print(f'Name: {tool.name}, description: {tool.description}')
+                if tool.name == 'get_info_support_apple':
+                    result = await client.call_tool("get_info_support_apple", {"query": query})
+                    print("...")
+                    print(result)
+                    print("...")
+                    print(result.content[0].text)
+                    results = result.content[0].text
+            return {"source": "local", "results": results}
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+        finally:
+            # Fechar cliente explicitamente
+            try:
+                await client.cleanup()
+                print("Cliente MCP fechado corretamente")
+            except Exception as e:
+                print(f"Aviso: Erro ao fechar cliente: {e}")
 
 
 class SearchEngineSource(DataSource):

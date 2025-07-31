@@ -4,6 +4,13 @@ from langchain_community.vectorstores.chroma import Chroma
 from langchain_community.document_loaders.pdf import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
+from langchain_openai.chat_models import ChatOpenAI
+from langchain.chains.retrieval_qa.base import RetrievalQA
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 def load_vectordb():
     paths = [
@@ -37,3 +44,35 @@ def load_vectordb():
         embedding=embeddings_model,
         persist_directory=directory
     )
+
+# if vectordb is None:
+#     vectordb = load_vectordb()
+
+def get_query(query: str):
+    vectordb = load_vectordb()
+
+    if 1==0:
+        chat = ChatOpenAI(model="gpt-4o-mini")
+
+        chat_chain = RetrievalQA.from_chain_type(
+            llm=chat,
+            retriever=vectordb.as_retriever(search_type='mmr'),
+        )
+
+        response = chat_chain.invoke({"query": query})
+        return response["result"]
+
+    if 1==1:
+        docs = vectordb.similarity_search(query, k=3)
+        for doc in docs:
+            print(doc.page_content)
+            print(f"========{doc.metadata}\n")
+            return docs
+
+    if 1==0: 
+        docs = vectordb.max_marginal_relevance_search(query, k=3, fetch_k=10)
+        for doc in docs:
+            print(doc.page_content)
+            print(f"========{doc.metadata}\n")
+            return docs
+
