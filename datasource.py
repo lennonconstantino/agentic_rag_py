@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import asyncio
+import json
 from typing import Dict, Any
 
 from mcp_base.client.mcp_client import McpClient
@@ -37,15 +38,19 @@ class LocalDataSource(DataSource):
 
             tools = await client.get_tools()  # await aqui
             for tool in tools:
-                print(f'Name: {tool.name}, description: {tool.description}')
                 if tool.name == 'get_info_support_apple':
+                    print(f'Name: {tool.name}, description: {tool.description}')
                     result = await client.call_tool("get_info_support_apple", {"query": query})
-                    print("...")
-                    print(result)
-                    print("...")
                     print(result.content[0].text)
-                    results = result.content[0].text
-            return {"source": "local", "results": results}
+                    jsons = []
+                    for textContent in results.content:
+                        jsons.append(json.loads(textContent.text))
+
+                    responses = "\n".join([f"{response["content"]}" for response in jsons])
+            return {
+                "source": "local",
+                "results": responses
+            }
         except Exception as e:
             print(f"Error: {e}")
             return None
@@ -63,11 +68,44 @@ class SearchEngineSource(DataSource):
     
     def fetch(self, query: str) -> Dict[str, Any]:
         # Placeholder for actual search engine integration
-        return {
-            "source": "search_engine",
-            "results": f"Search results for: {query}",
-            "urls": ["http://example1.com", "http://example2.com"]
-        }
+        return asyncio.run(self._fetch(query))
+    
+    async def _fetch(self, query: str) -> Dict[str, Any]:
+        print("...")
+        print("SearchEngineSource")
+
+        client = McpClient()
+
+        try:
+            await client.initialize_with_stdio("mcp", ["run", "mcp_base/server/server_support_apple.py"])
+
+            tools = await client.get_tools()
+            for tool in tools:
+                if tool.name == 'search_web':
+                    print(f'Name: {tool.name}, description: {tool.description}')
+                    results = await client.call_tool("search_web", {"query": query})
+                    jsons = []
+                    for textContent in results.content:
+                        jsons.append(json.loads(textContent.text))
+
+                    responses = "\n".join([f"{response["content"]}" for response in jsons])
+                    urls = [response["url"] for response in jsons]
+            return {
+                "source": "search_engine",
+                "results": responses,
+                "urls": urls
+            }
+
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+        finally:
+            # Fechar cliente explicitamente
+            try:
+                await client.cleanup()
+                print("Cliente MCP fechado corretamente")
+            except Exception as e:
+                print(f"Aviso: Erro ao fechar cliente: {e}")
 
 class CloudEngineSource(DataSource):
     """Cloud engine data source implementation"""

@@ -14,7 +14,8 @@ load_dotenv()
 
 def load_vectordb():
     paths = [
-        "rag/docs/guia_assistencia_tecnica_apple.pdf",
+        "rag/docs/apple_technical_support_guide_en.pdf",
+        "rag/docs/guia_de_assistencia_tecnica_apple_pt.pdf"
     ]
 
     pages = []
@@ -45,9 +46,6 @@ def load_vectordb():
         persist_directory=directory
     )
 
-# if vectordb is None:
-#     vectordb = load_vectordb()
-
 def get_query(query: str):
     vectordb = load_vectordb()
 
@@ -62,17 +60,16 @@ def get_query(query: str):
         response = chat_chain.invoke({"query": query})
         return response["result"]
 
-    if 1==1:
+    if 1==0:
         docs = vectordb.similarity_search(query, k=3)
         for doc in docs:
             print(doc.page_content)
             print(f"========{doc.metadata}\n")
             return docs
 
-    if 1==0: 
+    if 1==1: 
         docs = vectordb.max_marginal_relevance_search(query, k=3, fetch_k=10)
         for doc in docs:
             print(doc.page_content)
             print(f"========{doc.metadata}\n")
             return docs
-

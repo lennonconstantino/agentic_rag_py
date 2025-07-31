@@ -20,7 +20,9 @@ def main():
         # "How many employees does our company have?",
         # "What is the mission of Apple?",
         # "What is the value proposition of Apple?",
-        "What is the products of Apple?",
+        "List the all products of Apple?",
+        "I can't turn off my Mac mini Pro M2",
+        "What is the most searched item in the FAQ from Apple?"
     ]
     
     for query in queries:
@@ -30,6 +32,4 @@ def main():
         print(f"Memory stats: {rag_system.get_memory_stats()}") 
 
 if __name__ == "__main__":
-    #asyncio.run(main())
     main()
-    #load_vectordb()
