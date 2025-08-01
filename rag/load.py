@@ -1,5 +1,6 @@
 from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores.chroma import Chroma
+#from langchain_community.vectorstores.chroma import Chroma
+from langchain_chroma import Chroma
 
 from langchain_community.document_loaders.pdf import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -10,7 +11,6 @@ from langchain.chains.retrieval_qa.base import RetrievalQA
 from dotenv import load_dotenv
 
 load_dotenv()
-
 
 def load_vectordb():
     paths = [
@@ -47,7 +47,13 @@ def load_vectordb():
     )
 
 def get_query(query: str):
-    vectordb = load_vectordb()
+    embedding_model = OpenAIEmbeddings()
+    directory = 'rag/files/chat_retrieval_db'
+
+    vectordb = Chroma(
+        embedding_function=embedding_model,
+        persist_directory=directory
+    )
 
     if 1==0:
         chat = ChatOpenAI(model="gpt-4o-mini")

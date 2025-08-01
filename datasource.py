@@ -40,13 +40,13 @@ class LocalDataSource(DataSource):
             for tool in tools:
                 if tool.name == 'get_info_support_apple':
                     print(f'Name: {tool.name}, description: {tool.description}')
-                    result = await client.call_tool("get_info_support_apple", {"query": query})
-                    print(result.content[0].text)
+                    results = await client.call_tool("get_info_support_apple", {"query": query})
+                    print(results.content[0].text)
                     jsons = []
                     for textContent in results.content:
                         jsons.append(json.loads(textContent.text))
 
-                    responses = "\n".join([f"{response["content"]}" for response in jsons])
+                    responses = "\n".join([f"{response["page_content"]}" for response in jsons if response["page_content"]])
             return {
                 "source": "local",
                 "results": responses
