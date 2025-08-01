@@ -12,7 +12,15 @@ mcp = FastMCP("AssistantSupportApple")
 
 @mcp.tool()
 def get_info_support_apple(query: str):
-    """Tool to get information about Apple support"""
+    """
+    Tool to get information about Apple support
+
+    Arguments:
+    Query: Terms to search on documents
+
+    Returns:
+    All information that we can
+    """
     print("...")
     response = get_query(query)
     #return "Apple support information"
