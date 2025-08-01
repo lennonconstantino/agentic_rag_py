@@ -71,7 +71,13 @@ def get_customer_by_email(email: str) -> Optional[Dict]:
 
 @mcp.tool()
 def get_agent_workload(agent_id: int) -> Dict:
-    pass
+    try:
+        db = AppleHelpDeskDB()
+        return db.get_agent_workload(agent_id)
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        db.close()
 
 ##################################################################
 # PERSISTENCE UTILITY FUNCTIONS
@@ -100,7 +106,13 @@ def create_ticket(customer_id: int, category_id: int, subject: str, description:
 @mcp.tool()
 def update_ticket_status(ticket_id: int, status: str, agent_id: Optional[int] = None, 
                            resolution: Optional[str] = None) -> bool:
-    pass
+    try:
+        db = AppleHelpDeskDB()
+        return db.update_ticket_status(ticket_id=ticket_id, status=status, agent_id=agent_id, resolution=resolution)
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        db.close()
 
 @mcp.tool()
 def add_ticket_comment(ticket_id: int, content: str, agent_id: Optional[int] = None, 
@@ -122,17 +134,35 @@ def add_ticket_comment(ticket_id: int, content: str, agent_id: Optional[int] = N
 @mcp.tool()
 def create_customer(first_name: str, last_name: str, email: str, 
                        phone: Optional[str] = None, apple_id: Optional[str] = None) -> int:
-    pass
+    try:
+        db = AppleHelpDeskDB()
+        return db.create_customer(first_name, last_name, email, phone, apple_id)
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        db.close()
 
 @mcp.tool()
 def create_kb_article(title: str, content: str, category_id: int, 
                          created_by: int, product_id: Optional[int] = None, 
                          tags: Optional[str] = None) -> int:
-    pass
+    try:
+        db = AppleHelpDeskDB()
+        return db.create_kb_article(title, content, category_id, created_by, product_id, tags)
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        db.close()
 
 @mcp.tool()
 def increment_kb_view_count(article_id: int):
-    pass
+    try:
+        db = AppleHelpDeskDB()
+        return db.increment_kb_view_count(article_id)
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        db.close()
 
 ##################################################################
 # Reporting functions

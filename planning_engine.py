@@ -26,12 +26,16 @@ class PlanningEngine:
         ]
         
         # Determine data sources based on query type
-        data_sources = ["local" ]
+        # TODO: dealing routes
+        data_sources = ["local"]
         if "current" in query.lower() or "latest" in query.lower():
             data_sources.extend(["search_engine", "cloud_engine"])
 
-        if "searched" in query.lower():
+        if ("searched", "search", "find") in query.lower():
             data_sources.extend(["search_engine"])
+
+        if ("ticket", "article", "customer", "status", "update", "statistics") in query.lower():
+            data_sources.extend(["cloud_engine"])
         
         steps = [
             "Analyze query intent",

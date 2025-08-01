@@ -112,8 +112,28 @@ class CloudEngineSource(DataSource):
     
     def fetch(self, query: str) -> Dict[str, Any]:
         # Placeholder for cloud API integration
-        return {
-            "source": "cloud_engine",
-            "results": f"Cloud data for: {query}",
-            "metadata": {"confidence": 0.95}
-        }
+        # return {
+        #     "source": "cloud_engine",
+        #     "results": f"Cloud data for: {query}",
+        #     "metadata": {"confidence": 0.95}
+        # }
+        return asyncio.run(self._fetch(query))
+    
+    async def _fetch(self, query: str) -> Dict[str, Any]:
+        try:
+            print("...")
+            print("SearchEngineSource")
+
+            client = McpClient()
+            
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+        finally:
+            # Fechar cliente explicitamente
+            try:
+                await client.cleanup()
+                print("Cliente MCP fechado corretamente")
+            except Exception as e:
+                print(f"Aviso: Erro ao fechar cliente: {e}")
+
