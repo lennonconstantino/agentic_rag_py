@@ -2,7 +2,7 @@ import asyncio
 from memory import Memory
 from planning_engine import PlanningEngine
 from datasource import LocalDataSource, SearchEngineSource, CloudEngineSource
-from llm_provider import OpenAIProvider
+from llm_provider import LlamaProvider, OpenAIProvider
 import json
 
 from agents import Agent, ModelSettings, Runner
@@ -21,7 +21,7 @@ class AggregatorAgent:
         # }
         self.history = []
         self.current_agent = None
-        self.llm_provider = OpenAIProvider()
+        self.llm_provider = LlamaProvider()
 
         # Inicializar os agentes
         self._setup_agents()
@@ -45,7 +45,7 @@ class AggregatorAgent:
         self.agentSearchEngineSource = Agent(
             name="SearchEngineAssistant",
             model=self.llm_provider.model,
-            handoff_description="Assistente para fazer buscas de fontes externas na web",
+            handoff_description="Assistente que fará buscas em fontes externas na web",
             instructions="Você só vai responder a pergunta do usuário." \
                 "Você é um assistente para fazer buscas na internet que obdeçam o contexto da conversa e solicitaçao do usuário." \
                 "Todas as buscas devem ser feitas em fontes confiáveis sempre respeitando o contexto da solicitação" \
