@@ -22,7 +22,8 @@ def main():
         # "What is the value proposition of Apple?",
         "List the all products of Apple?",
         "I can't turn off my Mac mini Pro M2",
-        "What is the most searched item in the FAQ from Apple?"
+        "What is the most searched item in the FAQ from Apple?",
+        "Faça um relatorio dos chamados em aberto"
     ]
     
     for query in queries:

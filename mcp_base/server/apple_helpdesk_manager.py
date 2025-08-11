@@ -11,7 +11,7 @@ from typing import Dict, List, Optional, Tuple, Any
 import json
 
 class AppleHelpDeskDB:
-    def __init__(self, db_path: str = "apple_helpdesk.db"):
+    def __init__(self, db_path: str = "mcp_base/server/apple_helpdesk.db"):
         """Initialize database connection and create tables if needed"""
         self.db_path = db_path
         self.conn = None
