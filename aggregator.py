@@ -83,7 +83,7 @@ class AggregatorAgent:
             name="AggregatorAssistant",
             model=self.llm_provider.model,
             handoffs=[self.agentRagEngineSource, self.agentSearchEngineSource, self.agentCloudEngineSource],
-            instructions="Você só vai entender qual é a solicitação e rotear das solicitações dos usuários." \
+            instructions="Você deve entender a solicitação do usuário e rotear para os agentes especializados." \
                 #"Você é responsável pela recepção e deve perguntar de maneira cordial e educada o que o usuário deseja. " \
                 #"Quando você rotear a para outro agente manter a pergunta que você recebeu como entrada."
                 "Você é responsável por orquestrar, receber os pedidos e entender as solicitações para dar a melhor resposta possível. " \
