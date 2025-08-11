@@ -103,6 +103,8 @@ class AggregatorAgent:
     async def _chat(self, query: str):
         """Processa a entrada do usuário e executa o chat"""
         # Adiciona a entrada do usuário ao histórico
+        self.current_agent = self.agentAggregator
+
         self.history.append({
             "role": "user",
             "content": query

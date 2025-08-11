@@ -15,15 +15,15 @@ def main():
     
     # Process some queries
     queries = [
-        # "What do you know about Apple?",
+        "What do you know about Apple?",
         # "What are the latest trends in AI?",
         # "How many employees does our company have?",
         # "What is the mission of Apple?",
         # "What is the value proposition of Apple?",
-        "List the all products of Apple?",
+        #"List the all products of Apple",
         "I can't turn off my Mac mini Pro M2",
-        "What is the most searched item in the FAQ from Apple?",
-        "Faça um relatorio dos chamados em aberto"
+        #"What is the most searched item in the FAQ from Apple?",
+        "Make a report regarding all calls"
     ]
     
     for query in queries:
