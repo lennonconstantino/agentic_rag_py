@@ -39,7 +39,8 @@ class AggregatorAgent:
             instructions="Você só vai responder a pergunta do usuário." \
                 "Você é um assistente para fazer buscas nas documentações oficiais que estão nas nossas bases locais" \
                 "Identifique se o produto que está sendo questionado está nas nossas documentações, caso verdadeiro trazer o troubleshooting. Usar a ferramenta (get_info_support_apple)" \
-                "Caso o cliente informar um produto que não se encontra na nossa documentaçao pedir para o SearchEngineAssistant fazer a busca",
+                "Caso o cliente informar um produto que não se encontra na nossa documentaçao pedir para o SearchEngineAssistant fazer a busca" \
+                "",
             model_settings=ModelSettings(tool_choice="auto", temperature=0, parallel_tool_calls=False), 
         )
         self.agentSearchEngineSource = Agent(
@@ -49,13 +50,14 @@ class AggregatorAgent:
             instructions="Você só vai responder a pergunta do usuário." \
                 "Você é um assistente para fazer buscas na internet que obdeçam o contexto da conversa e solicitaçao do usuário." \
                 "Todas as buscas devem ser feitas em fontes confiáveis sempre respeitando o contexto da solicitação" \
-                "A ferramenta que você vai usar para fazer as buscas complementares caso necessário se chama (search_web)",
+                "A ferramenta que você vai usar para fazer as buscas complementares caso necessário se chama (search_web)" \
+                "",
             model_settings=ModelSettings(tool_choice="auto", temperature=0, parallel_tool_calls=False), 
         )
         self.agentCloudEngineSource = Agent(
             name="CloudEngineAssistant",
             model=self.llm_provider.model,
-            handoff_description="Assistente que fará a gestão do supporte.",
+            handoff_description="Assistente gestor do supporte.",
             instructions="Você só vai responder a pergunta do usuário."\
                 "Você é o responsável pelas operações no sistema de ISTM do HelpDesk da Apple." \
                 "Como administrador, você podera fazer buscas e persistencias. Através das Ferramentas descritas" \
@@ -75,7 +77,7 @@ class AggregatorAgent:
                 "- Para pegar as informações sobre as estatisticas dos chamados, use a ferramenta (get_ticket_statistics)" \
                 "Se precisar de informações técnicas para resolver tickets, " \
                 "COMUNIQUE-SE com RagEngineAssistant" \
-                "Você poderá fazer executar tudo o que o usuário lhe pedir."
+                "Você poderá fazer executar tudo o que o usuário lhe pedir." \
                 "",
             model_settings=ModelSettings(tool_choice="auto", temperature=0, parallel_tool_calls=False), 
         ) 
@@ -173,9 +175,6 @@ class AggregatorAgent:
         # Step 4: Generation Phase
         print("✨ Generation Phase...")
         context_str = json.dumps(enhanced_context, indent=2)
-        # print("="*60)
-        # print(context_str)
-        # print("="*60)
         response = self.llm_provider.generate(query, context_str)
         
         # Step 5: Memory Update
