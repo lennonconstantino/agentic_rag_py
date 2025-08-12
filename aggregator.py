@@ -222,11 +222,6 @@ class AggregatorAgent:
 
     async def _chat(self, query: str):
         """Processa a entrada do usuário e executa o chat"""
-
-        #print(f"🚀 === STARTING CHAT ===")
-        #print(f"🔄 Query: {query}")
-        #print(f"📋 History antes: {len(self.history)} itens")
-        
         # Adiciona a entrada do usuário ao histórico
         self.current_agent = self.agentAggregator
         
@@ -234,9 +229,6 @@ class AggregatorAgent:
             "role": "user",
             "content": query
         })
-        
-        #print(f"📋 History depois: {len(self.history)} itens")
-        #print(f"🤖 Current agent: {self.current_agent.name}")
         
         # Conecta com o servidor MCP e executa
         async with MCPServerStdio(params={"command": "mcp", "args": ["run", "mcp_base/server/server_support_apple.py"]}) as server:            
@@ -254,21 +246,13 @@ class AggregatorAgent:
                     context=self.history
                 )
                 
-                #print(f"📤 Last agent: {result.last_agent.name}")
-                #print(f"💬 Final output: {result.final_output}")
-                #print(f"🔄 Messages count: {len(result.messages) if hasattr(result, 'messages') else 'N/A'}")
-                
                 # Atualiza o estado
                 self.current_agent = result.last_agent
                 self.history = result.to_input_list()
-                
-                #print(f"🔄 History atualizada: {len(self.history)} itens")
-                #print(f"🚀 === CHAT FINISHED ===")
-
                 return result
                 
             except Exception as e:
-                print(f"❌ ERRO no Runner: {e}")
+                print(f"ERRO no Runner: {e}")
                 import traceback
                 traceback.print_exc()
                 return None

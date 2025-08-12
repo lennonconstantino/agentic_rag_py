@@ -16,7 +16,6 @@ def main():
 
     # Process some queries
     queries = [
-        #"Hi!",
         #"What do you know about Apple?",
         #"What are the latest trends in AI?",
         "Who is the CEO from apple?",
