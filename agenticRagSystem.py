@@ -5,8 +5,8 @@ from typing import Dict
 class AgenticRAGSystem:
     """Main system class that provides the user interface"""
     
-    def __init__(self):
-        self.aggregator = AggregatorAgent()
+    def __init__(self, flag_queries_loop: bool):
+        self.aggregator = AggregatorAgent(flag_queries_loop)
     
     def query(self, user_input: str) -> str:
         """Process user query and return response"""

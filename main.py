@@ -1,10 +1,11 @@
+import time
 from agenticRagSystem import AgenticRAGSystem
 from rag.load import load_vectordb
 import asyncio
 
 def main():
     # Initialize the Agentic RAG system
-    rag_system = AgenticRAGSystem()
+    rag_system = AgenticRAGSystem(True)
     
     # Add some long-term memory
     rag_system.aggregator.memory.add_long_term("company_info", {
@@ -12,18 +13,21 @@ def main():
         "founded": "1976",
         "employees": 150000
     })
-    
+
     # Process some queries
     queries = [
-        "What do you know about Apple?",
-        # "What are the latest trends in AI?",
+        #"Hi!",
+        #"What do you know about Apple?",
+        #"What are the latest trends in AI?",
+        "Who is the CEO from apple?",
         # "How many employees does our company have?",
         # "What is the mission of Apple?",
         # "What is the value proposition of Apple?",
         #"List the all products of Apple",
         "I can't turn off my Mac mini Pro M2",
+        #"My Apple Music is not working.",
         #"What is the most searched item in the FAQ from Apple?",
-        "Make a report regarding all calls"
+        "Make a report regarding all tickets"
     ]
     
     for query in queries:
