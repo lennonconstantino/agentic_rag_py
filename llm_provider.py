@@ -16,7 +16,7 @@ class LLMProvider(ABC):
 class OpenAIProvider(LLMProvider):
     """OpenAI provider implementation"""
     
-    def __init__(self, model: str = "gpt-3.5-turbo-0125"):#"gpt-3.5-turbo"):
+    def __init__(self, model: str = "gpt-3.5-turbo-0125"):
         self.model = model
         try:
             self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))

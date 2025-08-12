@@ -1,7 +1,6 @@
 import asyncio
 from memory import Memory
 from planning_engine import PlanningEngine
-from datasource import LocalDataSource, SearchEngineSource, CloudEngineSource
 from llm_provider import OpenAIProvider
 import json
 
@@ -15,11 +14,6 @@ class AggregatorAgent:
 
         self.memory = Memory(short_term={}, long_term={})
         self.planning_engine = PlanningEngine()
-        # self.data_sources = {
-        #     "local": LocalDataSource({"ai": "starting"}),
-        #     "search_engine": SearchEngineSource(),
-        #     "cloud_engine": CloudEngineSource()
-        # }
         self.history = []
         self.current_agent = None
         self.llm_provider = OpenAIProvider()
@@ -210,15 +204,8 @@ class AggregatorAgent:
     
     def reset_conversation(self):
         """Reseta completamente a conversa"""
-        #print(f"🔄 === RESET CONVERSATION ===")
-        #print(f"📋 History antes reset: {len(self.history)} itens")
-        
         self.history = []
-        #self.current_agent = self.agentAggregator
-        
-        #print(f"📋 History depois reset: {len(self.history)} itens")
-        #print(f"🤖 Agent resetado para: {self.current_agent.name}")
-        #print(f"🔄 === RESET COMPLETE ===")
+
 
     async def _chat(self, query: str):
         """Processa a entrada do usuário e executa o chat"""
@@ -272,24 +259,18 @@ class AggregatorAgent:
         plan = self.planning_engine.create_plan(query, memory_context)
         
         print(f"   Plan created with {len(plan.steps)} steps")
-        print(f"   Data sources: {plan.data_sources}")
         
         # Step 2: Information Retrieval Phase
         print("🔍 Fetching Phase...")
         retrieved_context = {}
         
-        # for source_name in plan.data_sources:
-        #     if source_name in self.data_sources:
-        #         source_data = self.data_sources[source_name].fetch(query)
-        #         retrieved_context[source_name] = source_data
-        #         print(f"   ✓ Fetched from {source_name}")
-
         source_data = asyncio.run(self._chat(query=query))
         retrieved_context["local"] = { 
             "source" : self.current_agent.name,
             "results": source_data.final_output 
         }
-        print("::: ", retrieved_context["local"]["source"])
+        plan.data_sources=retrieved_context["local"]["source"]
+        print(f"   Data sources: {plan.data_sources}")
         
         # Step 3: Context Enhancement
         print("🔧 Context Enhancement...")
