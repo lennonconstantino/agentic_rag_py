@@ -1,4 +1,6 @@
+import json
 from typing import Dict, Any
+from llm_provider import OpenAIProvider
 from reasoning import ReasoningType
 from plan import Plan
 
@@ -6,19 +8,38 @@ from plan import Plan
 class PlanningEngine:
     """Handles planning and reasoning for information retrieval"""
     
-    def __init__(self, reasoning_type: ReasoningType = ReasoningType.REACT):
-        self.reasoning_type = reasoning_type
+    def __init__(self):
+        self.reasoning_type = None
     
     def create_plan(self, query: str, memory_context: Dict[str, Any]) -> Plan:
         """Create an execution plan based on query and memory context"""
         
-        if self.reasoning_type == ReasoningType.REACT:
+        prompt = f"""
+Analyze the following prompt and return ONLY a valid JSON object with the specified format.
+
+Prompt: {query}
+
+Return ONLY valid JSON in this exact format (no additional text, explanations, or formatting):
+
+{{
+    "task_type": "classification|generation|analysis|troubleshooting|etc",
+    "prompt_strategy": "CoT|ReAct|zero-shot|few-shot|etc", 
+    "domain": "math|programming|creative|technology|etc",
+    "action": "true|false"
+}}
+        """
+        llm_provider = OpenAIProvider()
+        response = llm_provider.query(prompt=prompt)
+        response = json.loads(response)
+
+        if response["action"]:
             return self._react_planning(query, memory_context)
         else:
             return self._cot_planning(query, memory_context)
     
     def _react_planning(self, query: str, memory_context: Dict[str, Any]) -> Plan:
         """ReACT (Reasoning + Acting) planning approach"""
+        self.reasoning_type: ReasoningType = ReasoningType.REACT
         reasoning_trace = [
             f"Thought: I need to find information about '{query}'",
             f"Action: Check memory for relevant context",
@@ -49,6 +70,7 @@ class PlanningEngine:
 
     def _cot_planning(self, query: str, memory_context: Dict[str, Any]) -> Plan:
         """Chain of Thought planning approach"""
+        self.reasoning_type: ReasoningType = ReasoningType.COT
         reasoning_trace = [
             f"Let me think step by step about '{query}'",
             "First, I should understand what information is being requested",

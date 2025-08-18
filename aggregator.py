@@ -10,7 +10,7 @@ from agents.mcp import MCPServerStdio
 class AggregatorAgent:
     """Main aggregator agent that orchestrates the RAG process"""
     
-    def __init__(self, flag_loop: bool | None):
+    def __init__(self, flag_loop: bool = False):
 
         self.memory = Memory(short_term={}, long_term={})
         self.planning_engine = PlanningEngine()
@@ -253,8 +253,6 @@ class AggregatorAgent:
         # Step 1: Planning Phase
         print("🧠 Planning Phase...")
         memory_context = self.memory.get_relevant_context(query)
-
-        # TODO... ver qual é o tipo da query
 
         plan = self.planning_engine.create_plan(query, memory_context)
         

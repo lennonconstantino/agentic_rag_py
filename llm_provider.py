@@ -49,3 +49,21 @@ class OpenAIProvider(LLMProvider):
                 return f"Error generating response. Mock response for: {prompt}"
         else:
             return f"Mock response based on context for: {prompt}"
+
+    def query(self, prompt: str) -> str:
+        if self.use_real_api:
+            try:
+                response = self.client.chat.completions.create(
+                    model=self.model,
+                    messages=[
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=0.1,
+                    max_tokens=500
+                )
+                return response.choices[0].message.content
+            except Exception as e:
+                print(f"Error calling OpenAI API: {e}")
+                return f"Error generating response. Mock response for: {prompt}"
+        else:
+            return f"Mock response based on context for: {prompt}"
